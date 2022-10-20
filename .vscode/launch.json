@@ -17,7 +17,7 @@
       "request": "launch",
       "mainClass": "fr.jellycat.GenerateAst",
       "projectName": "tool",
-      "args": ["src/main/java/fr/jellycat"]
+      "args": ["core/main/java/fr/jellycat"]
     }
   ]
 }
