@@ -521,10 +521,11 @@
   <modules>
 
 
+    <module>jeevee</module>
+
+
     <module>tool</module>
 
-
-    <module>jeevee</module>
 
   </modules>
 

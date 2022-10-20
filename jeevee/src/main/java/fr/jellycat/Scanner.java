@@ -26,7 +26,7 @@ class Scanner {
             scanToken();
         }
 
-        tokens.add(new Token(EOF, "", null, line, start));
+        tokens.add(new Token(EOF, "", null, line));
         return tokens;
     }
 
@@ -115,7 +115,7 @@ class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    Eevee.error(line, start, "Unexpected character.");
+                    Jeevee.error(line, start, "Unexpected character.");
                 }
                 break;
         }
@@ -158,7 +158,7 @@ class Scanner {
         }
 
         if (isAtEnd()) {
-            Eevee.error(line, start, "Unterminated string.");
+            Jeevee.error(line, start, "Unterminated string.");
             return;
         }
 
@@ -218,7 +218,7 @@ class Scanner {
 
     private void addToken(TokenType type, Object literal) {
         String text = source.substring(start, current);
-        tokens.add(new Token(type, text, literal, line, start));
+        tokens.add(new Token(type, text, literal, line));
     }
 
     private static final Map<String, TokenType> keywords;

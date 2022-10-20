@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * Unit test for simple App.
  */
-class EeveeTest {
+class JeeveeTest {
     /**
      * Rigorous Test.
      */

@@ -6,18 +6,23 @@
   "configurations": [
     {
       "type": "java",
-      "name": "Launch Eevee",
+      "name": "Launch Current File",
       "request": "launch",
-      "mainClass": "fr.jellycat.Eevee",
-      "projectName": "jeevee"
+      "mainClass": "${file}"
     },
     {
       "type": "java",
-      "name": "Launch AST Generator",
+      "name": "Launch GenerateAst",
       "request": "launch",
       "mainClass": "fr.jellycat.GenerateAst",
-      "projectName": "tool",
-      "args": ["jeevee/src/main/java/fr/jellycat"]
+      "projectName": "tool"
+    },
+    {
+      "type": "java",
+      "name": "Launch Jeevee",
+      "request": "launch",
+      "mainClass": "fr.jellycat.Jeevee",
+      "projectName": "jeevee"
     }
   ]
 }
