@@ -30,7 +30,12 @@ class AstPrinter implements Expr.Visitor<String> {
     }
 
     @Override
-    public String visitUnaryExpr(Expr.Unary expr) {
+    public String visitPostUnaryExpr(Expr.PostUnary expr) {
+        return parenthesize(expr.operator.lexeme, expr.left);
+    }
+
+    @Override
+    public String visitPreUnaryExpr(Expr.PreUnary expr) {
         return parenthesize(expr.operator.lexeme, expr.right);
     }
 

@@ -89,22 +89,33 @@ class Parser {
     }
 
     private Expr factor() {
-        Expr expr = unary();
+        Expr expr = postunary();
 
         while (match(STAR, STAR_EQUAL, SLASH, SLASH_EQUAL, PERCENT, PERCENT_EQUAL)) {
             Token operator = previous();
-            Expr right = unary();
+            Expr right = postunary();
             expr = new Expr.Binary(expr, operator, right);
         }
 
         return expr;
     }
 
-    private Expr unary() {
+    private Expr postunary() {
+        Expr expr = preunary();
+
+        if (match(MINUS_MINUS, PLUS_PLUS)) {
+            Token operator = previous();
+            expr = new Expr.PostUnary(expr, operator);
+        }
+
+        return expr;
+    }
+
+    private Expr preunary() {
         if (match(MINUS, PLUS, BANG)) {
             Token operator = previous();
-            Expr right = unary();
-            return new Expr.Unary(operator, right);
+            Expr right = preunary();
+            return new Expr.PreUnary(operator, right);
         }
 
         return primary();

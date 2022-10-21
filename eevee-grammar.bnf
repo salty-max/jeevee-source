@@ -6,13 +6,14 @@ expression        -> literal
 
 literal           -> NUMBER | STRING | "true" | "false" | "nil" ;
 grouping          -> "(" expression ")" ;
-unary             -> ( "-" | "!" ) expression ;
+postunary         -> (expression ( "++" | "--" )) ;
+preunary          -> ( "-" | "!" ) expression ;
 ternary           -> expression operator expression operator expression ;
 binary            -> expression operator expression ;
 
 operator          -> "==" | "!=" | "<" | "<=" | ">" | ">="
-                  | "+" | "+=" | "-" | "-=" | "*" | | "*="
-                  | "/" | "/=" | "%" | "%=" | "?" | ":"
+                  | "+" | "+=" | "++" | "-" | "-=" | "--" | "*"
+                  | "*=" | "/" | "/=" | "%" | "%=" | "?" | ":"
                   ;
 
 expression        -> ternary
@@ -25,9 +26,11 @@ comparison        -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 
 term              -> factor ( ( "-" | "-=" | "+" | "+=" ) factor )* ;
 
-factor            -> unary ( ( "/" | "/=" | "*" | "*=" | "%" | "%=" ) unary )* ;
+factor            -> postunary ( ( "/" | "/=" | "*" | "*=" | "%" | "%=" ) postunary )* ;
 
-unary             -> ( "!"  | "-" ) unary
+postunary         -> ( "++" | "--") preunary ;
+
+preunary          -> ( "!"  | "-" ) unary
                   | primary
                   ;
 

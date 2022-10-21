@@ -65,10 +65,22 @@ class Scanner {
                 addToken(COLUMN);
                 break;
             case '-':
-                addToken(match('=') ? MINUS_EQUAL : MINUS);
+                if (match('-')) {
+                    addToken(MINUS_MINUS);
+                } else if (match('=')) {
+                    addToken(MINUS_EQUAL);
+                } else {
+                    addToken(MINUS);
+                }
                 break;
             case '+':
-                addToken(match('=') ? PLUS_EQUAL : PLUS);
+                if (match('+')) {
+                    addToken(PLUS_PLUS);
+                } else if (match('=')) {
+                    addToken(PLUS_EQUAL);
+                } else {
+                    addToken(PLUS);
+                }
                 break;
             case '*':
                 addToken(match('=') ? STAR_EQUAL : STAR);

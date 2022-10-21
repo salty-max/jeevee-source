@@ -12,6 +12,9 @@ public final class Jeevee {
     private static final Interpreter interpreter = new Interpreter();
     static boolean hadError = false;
     static boolean hadRuntimeError = false;
+    static String ANSI_RED = "\u001B[31m";
+    static String ANSI_BLUE = "\u001B[34m";
+    static String ANSI_RESET = "\u001B[0m";
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
@@ -82,7 +85,9 @@ public final class Jeevee {
     }
 
     static void runtimeError(RuntimeError error) {
-        System.err.println(error.getMessage() + "\n(" + error.token.line + ":" + error.token.column + ")");
+        System.err.println(ANSI_RED +
+                "Runtime error -> (" + error.token.line + ":" + error.token.column + ")\n" + error.getMessage()
+                + ANSI_RESET);
         hadRuntimeError = true;
     }
 }

@@ -4,7 +4,7 @@ class Interpreter implements Expr.Visitor<Object> {
     void interpret(Expr expression) {
         try {
             Object value = evaluate(expression);
-            System.out.println(stringify(value));
+            System.out.println(Jeevee.ANSI_BLUE + stringify(value) + Jeevee.ANSI_RESET);
         } catch (RuntimeError error) {
             Jeevee.runtimeError(error);
         }
@@ -21,7 +21,26 @@ class Interpreter implements Expr.Visitor<Object> {
     }
 
     @Override
-    public Object visitUnaryExpr(Expr.Unary expr) {
+    public Object visitPostUnaryExpr(Expr.PostUnary expr) {
+        Object left = evaluate(expr.left);
+
+        switch (expr.operator.type) {
+            case MINUS_MINUS:
+                checkNumberOperand(expr.operator, left);
+                return (double) left - 1;
+            case PLUS_PLUS:
+                checkNumberOperand(expr.operator, left);
+                return (double) left + 1;
+            default:
+                break;
+        }
+
+        // Unreachable.
+        return null;
+    }
+
+    @Override
+    public Object visitPreUnaryExpr(Expr.PreUnary expr) {
         Object right = evaluate(expr.right);
 
         switch (expr.operator.type) {
@@ -60,6 +79,7 @@ class Interpreter implements Expr.Visitor<Object> {
             }
             case SLASH:
                 checkNumberOperands(expr.operator, left, right);
+                checkDivisionByZero(expr.operator, right);
                 return (double) left / (double) right;
             case STAR:
                 checkNumberOperands(expr.operator, left, right);
@@ -118,6 +138,14 @@ class Interpreter implements Expr.Visitor<Object> {
         if (left instanceof Double && right instanceof Double)
             return;
         throw new RuntimeError(operator, "Operands must be numbers.");
+    }
+
+    private void checkDivisionByZero(Token operator, Object operand) {
+        if (operand instanceof Double && (double) operand == 0) {
+            throw new RuntimeError(operator, "Division by zero is not possible.");
+        }
+
+        return;
     }
 
     private boolean isTruthy(Object object) {

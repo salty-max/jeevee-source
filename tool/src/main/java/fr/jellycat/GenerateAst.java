@@ -15,11 +15,12 @@ public class GenerateAst {
         String outputDir = args[0];
 
         defineAst(outputDir, "Expr", Arrays.asList(
-                "Ternary   : Expr test, Token firstOperator, Expr consequent, Token secondOperator, Expr alternate",
+                "Ternary    : Expr test, Token firstOperator, Expr consequent, Token secondOperator, Expr alternate",
                 "Binary     : Expr left, Token operator, Expr right",
                 "Grouping   : Expr expression",
                 "Literal    : Object value",
-                "Unary      : Token operator, Expr right"));
+                "PreUnary   : Token operator, Expr right",
+                "PostUnary  : Expr left, Token operator"));
     }
 
     private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
