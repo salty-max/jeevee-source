@@ -77,13 +77,13 @@ class Scanner {
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;
             case '=':
-                addToken(match('=') ? BANG_EQUAL : BANG);
+                addToken(match('=') ? EQUAL_EQUAL : EQUAL);
                 break;
             case '<':
-                addToken(match('=') ? BANG_EQUAL : BANG);
+                addToken(match('=') ? LESS_EQUAL : LESS);
                 break;
             case '>':
-                addToken(match('=') ? BANG_EQUAL : BANG);
+                addToken(match('=') ? GREATER_EQUAL : GREATER);
                 break;
             case '/':
                 if (match('/')) {
