@@ -198,6 +198,8 @@ class Parser {
             case VAR:
             case WHILE:
                 return;
+            default:
+                break;
         }
 
         advance();
