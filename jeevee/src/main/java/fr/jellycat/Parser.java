@@ -79,7 +79,7 @@ class Parser {
     private Expr term() {
         Expr expr = factor();
 
-        while (match(MINUS, PLUS)) {
+        while (match(MINUS, MINUS_EQUAL, PLUS, PLUS_EQUAL)) {
             Token operator = previous();
             Expr right = factor();
             expr = new Expr.Binary(expr, operator, right);
@@ -91,7 +91,7 @@ class Parser {
     private Expr factor() {
         Expr expr = unary();
 
-        while (match(STAR, SLASH, PERCENT)) {
+        while (match(STAR, STAR_EQUAL, SLASH, SLASH_EQUAL, PERCENT, PERCENT_EQUAL)) {
             Token operator = previous();
             Expr right = unary();
             expr = new Expr.Binary(expr, operator, right);

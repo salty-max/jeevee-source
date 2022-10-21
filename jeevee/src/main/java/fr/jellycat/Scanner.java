@@ -52,17 +52,8 @@ class Scanner {
             case '.':
                 addToken(DOT);
                 break;
-            case '-':
-                addToken(MINUS);
-                break;
-            case '+':
-                addToken(PLUS);
-                break;
             case ';':
                 addToken(SEMICOLON);
-                break;
-            case '*':
-                addToken(STAR);
                 break;
             case '%':
                 addToken(PERCENT);
@@ -72,6 +63,15 @@ class Scanner {
                 break;
             case ':':
                 addToken(COLUMN);
+                break;
+            case '-':
+                addToken(match('=') ? MINUS_EQUAL : MINUS);
+                break;
+            case '+':
+                addToken(match('=') ? PLUS_EQUAL : PLUS);
+                break;
+            case '*':
+                addToken(match('=') ? STAR_EQUAL : STAR);
                 break;
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
@@ -100,6 +100,8 @@ class Scanner {
                     advance();
                     advance();
 
+                } else if (match('=')) {
+                    addToken(SLASH_EQUAL);
                 } else {
                     addToken(SLASH);
                 }

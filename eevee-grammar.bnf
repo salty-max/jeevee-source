@@ -9,8 +9,11 @@ grouping          -> "(" expression ")" ;
 unary             -> ( "-" | "!" ) expression ;
 ternary           -> expression operator expression operator expression ;
 binary            -> expression operator expression ;
+
 operator          -> "==" | "!=" | "<" | "<=" | ">" | ">="
-                  | "+" | "-" | "*" | "/" | "%" | "?" | ":" ;
+                  | "+" | "+=" | "-" | "-=" | "*" | | "*="
+                  | "/" | "/=" | "%" | "%=" | "?" | ":"
+                  ;
 
 expression        -> ternary
 
@@ -20,9 +23,9 @@ equality          -> comparison ( ( "!=" | "==" ) comparison )* ;
 
 comparison        -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 
-term              -> factor ( ( "-" | "+" ) factor )* ;
+term              -> factor ( ( "-" | "-=" | "+" | "+=" ) factor )* ;
 
-factor            -> unary ( ( "/" | "*" | "%" ) unary )* ;
+factor            -> unary ( ( "/" | "/=" | "*" | "*=" | "%" | "%=" ) unary )* ;
 
 unary             -> ( "!"  | "-" ) unary
                   | primary
