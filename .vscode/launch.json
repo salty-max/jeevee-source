@@ -15,7 +15,8 @@
       "name": "Launch GenerateAst",
       "request": "launch",
       "mainClass": "fr.jellycat.GenerateAst",
-      "projectName": "tool"
+      "projectName": "tool",
+      "args": ["jeevee/src/main/java/fr/jellycat"]
     },
     {
       "type": "java",

@@ -49,11 +49,15 @@ public final class Jeevee {
     private static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
 
-        // For now, just print the tokens.
-        for (Token token : tokens) {
-            System.out.println(token);
-        }
+        // Stop if there was a syntax error.
+        if (hadError)
+            return;
+
+        System.out.println(new AstPrinter().print(expression));
+
     }
 
     static void error(int line, int column, String message) {
@@ -63,5 +67,13 @@ public final class Jeevee {
     private static void report(int line, int column, String where, String message) {
         System.err.println("Error" + where + " (" + line + ":" + column + "): " + message);
         hadError = true;
+    }
+
+    static void error(Token token, int column, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, column, " at end", message);
+        } else {
+            report(token.line, column, " at '" + token.lexeme + "'", message);
+        }
     }
 }

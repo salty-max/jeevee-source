@@ -67,6 +67,12 @@ class Scanner {
             case '%':
                 addToken(PERCENT);
                 break;
+            case '?':
+                addToken(QUESTION_MARK);
+                break;
+            case ':':
+                addToken(COLUMN);
+                break;
             case '!':
                 addToken(match('=') ? BANG_EQUAL : BANG);
                 break;
