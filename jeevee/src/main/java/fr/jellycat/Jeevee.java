@@ -9,7 +9,9 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public final class Jeevee {
+    private static final Interpreter interpreter = new Interpreter();
     static boolean hadError = false;
+    static boolean hadRuntimeError = false;
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
@@ -28,6 +30,8 @@ public final class Jeevee {
 
         if (hadError)
             System.exit(65);
+        if (hadRuntimeError)
+            System.exit(70);
     }
 
     private static void runPrompt() throws IOException {
@@ -56,7 +60,7 @@ public final class Jeevee {
         if (hadError)
             return;
 
-        System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(expression);
 
     }
 
@@ -75,5 +79,10 @@ public final class Jeevee {
         } else {
             report(token.line, column, " at '" + token.lexeme + "'", message);
         }
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n(" + error.token.line + ":" + error.token.column + ")");
+        hadRuntimeError = true;
     }
 }
