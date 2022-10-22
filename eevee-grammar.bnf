@@ -1,12 +1,3 @@
-program           -> statement* EOF;
-
-statement         -> exprStmt
-                  | printStmt
-                  ;
-
-exprStmt          -> expression ";" ;
-printStmt         -> "print" expression ";" ;
-
 expression        -> literal
                   | unary
                   | binary
@@ -24,6 +15,20 @@ operator          -> "==" | "!=" | "<" | "<=" | ">" | ">="
                   | "+" | "+=" | "++" | "-" | "-=" | "--" | "*"
                   | "*=" | "/" | "/=" | "%" | "%=" | "?" | ":"
                   ;
+
+program           -> declaration* EOF ;
+
+declaration       -> varDecl
+                  | statement
+                  ;
+
+statement         -> exprStmt
+                  | printStmt
+                  ;
+
+varDecl           -> "var" IDENTIFIER ( "=" expression )? ";" ;
+exprStmt          -> expression ";" ;
+printStmt         -> "print" expression ";" ;
 
 expression        -> ternary
 
@@ -44,7 +49,7 @@ preunary          -> ( "!"  | "-" ) unary
                   ;
 
 primary           -> NUMBER | STRING | "true" | "false" | "nil"
-                  | "(" expression ")"
+                  | "(" expression ")" | IDENTIFIER
                   ;
 
 

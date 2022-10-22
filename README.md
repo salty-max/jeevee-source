@@ -1,4 +1,5 @@
-# Jeevee Language ![Eevee logo](./public/eevee_96.png)
+![Eevee logo](./public/eevee_96.png)
+# Jeevee Language
 
 Tree-walk interpreter with recursive-descent parser compiled in Java.
 

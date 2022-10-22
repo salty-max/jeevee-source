@@ -12,6 +12,7 @@ public final class Jeevee {
     private static final Interpreter interpreter = new Interpreter();
     static boolean hadError = false;
     static boolean hadRuntimeError = false;
+    static String ANSI_BOLD = "\u001B[1m";
     static String ANSI_RED = "\u001B[31m";
     static String ANSI_BLUE = "\u001B[34m";
     static String ANSI_RESET = "\u001B[0m";
@@ -72,7 +73,8 @@ public final class Jeevee {
     }
 
     private static void report(int line, int column, String where, String message) {
-        System.err.println(ANSI_RED + "Error" + where + " (" + line + ":" + column + "): " + message + ANSI_RESET);
+        System.err.println(
+                ANSI_BOLD + ANSI_RED + "Error" + where + " (" + line + ":" + column + "): " + message + ANSI_RESET);
         hadError = true;
     }
 
@@ -85,7 +87,7 @@ public final class Jeevee {
     }
 
     static void runtimeError(RuntimeError error) {
-        System.err.println(ANSI_RED +
+        System.err.println(ANSI_BOLD + ANSI_RED +
                 "Runtime error -> (" + error.token.line + ":" + error.token.column + ")\n" + error.getMessage()
                 + ANSI_RESET);
         hadRuntimeError = true;
