@@ -1,13 +1,29 @@
 package fr.jellycat;
 
-class Interpreter implements Expr.Visitor<Object> {
-    void interpret(Expr expression) {
+import java.util.List;
+
+class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+    void interpret(List<Stmt> statements) {
         try {
-            Object value = evaluate(expression);
-            System.out.println(Jeevee.ANSI_BLUE + stringify(value) + Jeevee.ANSI_RESET);
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
         } catch (RuntimeError error) {
             Jeevee.runtimeError(error);
         }
+    }
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt) {
+        Object value = evaluate(stmt.expression);
+        Jeevee.log(stringify(value));
+        return null;
     }
 
     @Override
@@ -126,6 +142,10 @@ class Interpreter implements Expr.Visitor<Object> {
 
     private Object evaluate(Expr expr) {
         return expr.accept(this);
+    }
+
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
     }
 
     private void checkNumberOperand(Token operator, Object operand) {

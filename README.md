@@ -1,3 +1,8 @@
 # Jeevee Language
 
-AST interpreter with recursive-descent parser compiled in Java.
+Tree-walk interpreter with recursive-descent parser compiled in Java.
+
+## Features
+
+- C-like syntax
+- Dynamic typing

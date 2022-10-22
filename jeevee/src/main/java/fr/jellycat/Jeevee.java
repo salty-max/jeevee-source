@@ -57,13 +57,13 @@ public final class Jeevee {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
+        List<Stmt> statements = parser.parse();
 
         // Stop if there was a syntax error.
         if (hadError)
             return;
 
-        interpreter.interpret(expression);
+        interpreter.interpret(statements);
 
     }
 
@@ -72,7 +72,7 @@ public final class Jeevee {
     }
 
     private static void report(int line, int column, String where, String message) {
-        System.err.println("Error" + where + " (" + line + ":" + column + "): " + message);
+        System.err.println(ANSI_RED + "Error" + where + " (" + line + ":" + column + "): " + message + ANSI_RESET);
         hadError = true;
     }
 
@@ -89,5 +89,9 @@ public final class Jeevee {
                 "Runtime error -> (" + error.token.line + ":" + error.token.column + ")\n" + error.getMessage()
                 + ANSI_RESET);
         hadRuntimeError = true;
+    }
+
+    static void log(String value) {
+        System.out.println(ANSI_BLUE + value + ANSI_RESET);
     }
 }
