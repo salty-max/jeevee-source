@@ -69,13 +69,31 @@ class Parser {
     }
 
     private Expr expression() {
-        return ternary();
+        return assignment();
+    }
+
+    private Expr assignment() {
+        Expr expr = ternary();
+
+        if (match(EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+
+            if (expr instanceof Expr.Variable) {
+                Token name = ((Expr.Variable) expr).name;
+                return new Expr.Assign(name, value);
+            }
+
+            throw error(equals, "Invalid assignment target.");
+        }
+
+        return expr;
     }
 
     private Expr ternary() {
         Expr expr = equality();
 
-        while (match(QUESTION_MARK)) {
+        if (match(QUESTION_MARK)) {
             Token firstOperator = previous();
 
             Expr consequent = equality();
@@ -89,7 +107,7 @@ class Parser {
                             alternate);
                 }
             } else {
-                throw error(peek(), "Expect ':' after expression.");
+                throw error(previous(), "Expect ':' after expression.");
             }
         }
 

@@ -30,7 +30,10 @@ varDecl           -> "var" IDENTIFIER ( "=" expression )? ";" ;
 exprStmt          -> expression ";" ;
 printStmt         -> "print" expression ";" ;
 
-expression        -> ternary
+expression        -> assignment ;
+
+assignment        -> IDENTIFIER "=" assignment
+                  | ternary ;
 
 ternary           -> equality ? equality (: ternary)* ;
 

@@ -15,6 +15,7 @@ public class GenerateAst {
         String outputDir = args[0];
 
         defineAst(outputDir, "Expr", Arrays.asList(
+                "Assign     : Token name, Expr value",
                 "Ternary    : Expr test, Token firstOperator, Expr consequent, Token secondOperator, Expr alternate",
                 "Binary     : Expr left, Token operator, Expr right",
                 "Grouping   : Expr expression",
