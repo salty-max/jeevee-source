@@ -27,7 +27,7 @@ class Parser {
 
     private Stmt declaration() {
         try {
-            if (match(VAR))
+            if (match(LET))
                 return varDeclaration();
 
             return statement();
@@ -41,7 +41,33 @@ class Parser {
         if (match(PRINT))
             return printStatement();
 
+        if (match(DO))
+            return new Stmt.Block(block());
+
         return expressionStatement();
+    }
+
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expect ';' after expression.");
+        return new Stmt.Expression(expr);
+    }
+
+    private List<Stmt> block() {
+        List<Stmt> statements = new ArrayList<>();
+
+        while (!check(END) && !isAtEnd()) {
+            statements.add(declaration());
+        }
+
+        consume(END, "Expect 'end' after block.");
+        return statements;
+    }
+
+    private Stmt printStatement() {
+        Expr value = expression();
+        consume(SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Print(value);
     }
 
     private Stmt varDeclaration() {
@@ -54,18 +80,6 @@ class Parser {
 
         consume(SEMICOLON, "Expect ';' after variable declaration.");
         return new Stmt.Var(name, initializer);
-    }
-
-    private Stmt printStatement() {
-        Expr value = expression();
-        consume(SEMICOLON, "Expect ';' after value.");
-        return new Stmt.Print(value);
-    }
-
-    private Stmt expressionStatement() {
-        Expr expr = expression();
-        consume(SEMICOLON, "Expect ';' after expression.");
-        return new Stmt.Expression(expr);
     }
 
     private Expr expression() {
@@ -272,7 +286,7 @@ class Parser {
             case MATCH:
             case PRINT:
             case RETURN:
-            case VAR:
+            case LET:
             case WHILE:
                 return;
             default:

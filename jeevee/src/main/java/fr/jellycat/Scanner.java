@@ -248,10 +248,13 @@ class Scanner {
         keywords.put("and", AND);
         keywords.put("class", CLASS);
         keywords.put("def", DEF);
+        keywords.put("do", DO);
+        keywords.put("end", END);
         keywords.put("false", FALSE);
         keywords.put("for", FOR);
         keywords.put("if", IF);
         keywords.put("lambda", LAMBDA);
+        keywords.put("let", LET);
         keywords.put("match", MATCH);
         keywords.put("nil", NIL);
         keywords.put("or", OR);
@@ -259,8 +262,8 @@ class Scanner {
         keywords.put("return", RETURN);
         keywords.put("self", SELF);
         keywords.put("super", SUPER);
+        keywords.put("then", THEN);
         keywords.put("true", TRUE);
-        keywords.put("var", VAR);
         keywords.put("while", WHILE);
     }
 }

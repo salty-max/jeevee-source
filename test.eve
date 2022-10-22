@@ -1,0 +1,23 @@
+let a = "global a";
+let b = "global b";
+let c = "global c";
+
+do
+  let a = "outer a";
+  let b = "outer b";
+
+  do
+    let a = "inner a";
+    print a;
+    print b;
+    print c;
+  end
+
+  print a;
+  print b;
+  print c;
+end
+
+print a;
+print b;
+print c;

@@ -20,10 +20,18 @@
     },
     {
       "type": "java",
-      "name": "Launch Jeevee",
+      "name": "Launch Jeevee REPL",
       "request": "launch",
       "mainClass": "fr.jellycat.Jeevee",
       "projectName": "jeevee"
+    },
+    {
+      "type": "java",
+      "name": "Launch Jeevee Script",
+      "request": "launch",
+      "mainClass": "fr.jellycat.Jeevee",
+      "projectName": "jeevee",
+      "args": ["test.eve"]
     }
   ]
 }
