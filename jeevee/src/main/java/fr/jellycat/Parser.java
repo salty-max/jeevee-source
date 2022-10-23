@@ -113,7 +113,7 @@ class Parser {
     }
 
     private Expr assignment() {
-        Expr expr = ternary();
+        Expr expr = conditional();
 
         if (match(EQUAL)) {
             Token equals = previous();
@@ -130,7 +130,7 @@ class Parser {
         return expr;
     }
 
-    private Expr ternary() {
+    private Expr conditional() {
         Expr expr = equality();
 
         if (match(QUESTION_MARK)) {
@@ -141,9 +141,9 @@ class Parser {
             if (check(COLUMN)) {
                 while (match(COLUMN)) {
                     Token secondOperator = previous();
-                    Expr alternate = ternary();
+                    Expr alternate = conditional();
 
-                    expr = new Expr.Ternary(expr, firstOperator, consequent, secondOperator,
+                    expr = new Expr.Conditional(expr, firstOperator, consequent, secondOperator,
                             alternate);
                 }
             } else {
@@ -191,33 +191,33 @@ class Parser {
     }
 
     private Expr factor() {
-        Expr expr = postunary();
+        Expr expr = postfix();
 
         while (match(STAR, STAR_EQUAL, SLASH, SLASH_EQUAL, PERCENT, PERCENT_EQUAL)) {
             Token operator = previous();
-            Expr right = postunary();
+            Expr right = postfix();
             expr = new Expr.Binary(expr, operator, right);
         }
 
         return expr;
     }
 
-    private Expr postunary() {
-        Expr expr = preunary();
+    private Expr postfix() {
+        Expr expr = unary();
 
         if (match(MINUS_MINUS, PLUS_PLUS)) {
             Token operator = previous();
-            expr = new Expr.PostUnary(expr, operator);
+            expr = new Expr.PostFix(expr, operator);
         }
 
         return expr;
     }
 
-    private Expr preunary() {
+    private Expr unary() {
         if (match(MINUS, PLUS, BANG)) {
             Token operator = previous();
-            Expr right = preunary();
-            return new Expr.PreUnary(operator, right);
+            Expr right = unary();
+            return new Expr.Unary(operator, right);
         }
 
         return primary();

@@ -5,12 +5,12 @@ import java.util.List;
 abstract class Expr {
     interface Visitor<R> {
         R visitAssignExpr(Assign expr);
-        R visitTernaryExpr(Ternary expr);
+        R visitConditionalExpr(Conditional expr);
         R visitBinaryExpr(Binary expr);
         R visitGroupingExpr(Grouping expr);
         R visitLiteralExpr(Literal expr);
-        R visitPreUnaryExpr(PreUnary expr);
-        R visitPostUnaryExpr(PostUnary expr);
+        R visitUnaryExpr(Unary expr);
+        R visitPostFixExpr(PostFix expr);
         R visitVariableExpr(Variable expr);
     }
 
@@ -29,8 +29,8 @@ abstract class Expr {
         final Expr value;
     }
 
-    static class Ternary extends Expr {
-        Ternary(Expr test, Token firstOperator, Expr consequent, Token secondOperator, Expr alternate) {
+    static class Conditional extends Expr {
+        Conditional(Expr test, Token firstOperator, Expr consequent, Token secondOperator, Expr alternate) {
             this.test = test;
             this.firstOperator = firstOperator;
             this.consequent = consequent;
@@ -40,7 +40,7 @@ abstract class Expr {
 
         @Override
         <R> R accept(Visitor<R> visitor) {
-            return visitor.visitTernaryExpr(this);
+            return visitor.visitConditionalExpr(this);
         }
 
         final Expr test;
@@ -93,30 +93,30 @@ abstract class Expr {
         final Object value;
     }
 
-    static class PreUnary extends Expr {
-        PreUnary(Token operator, Expr right) {
+    static class Unary extends Expr {
+        Unary(Token operator, Expr right) {
             this.operator = operator;
             this.right = right;
         }
 
         @Override
         <R> R accept(Visitor<R> visitor) {
-            return visitor.visitPreUnaryExpr(this);
+            return visitor.visitUnaryExpr(this);
         }
 
         final Token operator;
         final Expr right;
     }
 
-    static class PostUnary extends Expr {
-        PostUnary(Expr left, Token operator) {
+    static class PostFix extends Expr {
+        PostFix(Expr left, Token operator) {
             this.left = left;
             this.operator = operator;
         }
 
         @Override
         <R> R accept(Visitor<R> visitor) {
-            return visitor.visitPostUnaryExpr(this);
+            return visitor.visitPostFixExpr(this);
         }
 
         final Expr left;

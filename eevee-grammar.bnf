@@ -1,61 +1,51 @@
-expression        -> literal
+expression        → literal
                   | unary
                   | binary
                   | grouping
                   ;
 
-literal           -> NUMBER | STRING | "true" | "false" | "nil" ;
-grouping          -> "(" expression ")" ;
-postunary         -> (expression ( "++" | "--" )) ;
-preunary          -> ( "-" | "!" ) expression ;
-ternary           -> expression operator expression operator expression ;
-binary            -> expression operator expression ;
+literal           → NUMBER | STRING | "true" | "false" | "nil" ;
+grouping          → "(" expression ")" ;
+unary             → ( "-" | "!" ) expression ;
+postfix           → (expression ( "++" | "--" )) ;
+conditional       → expression "?" expression ":" expression ;
+binary            → expression operator expression ;
 
-operator          -> "==" | "!=" | "<" | "<=" | ">" | ">="
+operator          → "==" | "!=" | "<" | "<=" | ">" | ">="
                   | "+" | "+=" | "++" | "-" | "-=" | "--" | "*"
                   | "*=" | "/" | "/=" | "%" | "%=" | "?" | ":"
                   ;
 
-program           -> declaration* EOF ;
-
-declaration       -> varDecl
+program           → declaration* EOF ;
+declaration       → varDecl
                   | statement
                   ;
-
-statement         -> exprStmt
+statement         → exprStmt
                   | printStmt
                   | block
                   ;
+block             → "{" declaration* "}" ;
+exprStmt          → expression ";" ;
+varDecl           → "let" IDENTIFIER ( "=" expression )? ";" ;
+printStmt         → "print" expression ";" ;
 
-block             -> "{" declaration* "}" ;
-
-varDecl           -> "let" IDENTIFIER ( "=" expression )? ";" ;
-exprStmt          -> expression ";" ;
-printStmt         -> "print" expression ";" ;
-
-expression        -> assignment ;
-
-assignment        -> IDENTIFIER "=" assignment
-                  | ternary ;
-
-ternary           -> equality ? equality (: ternary)* ;
-
-equality          -> comparison ( ( "!=" | "==" ) comparison )* ;
-
-comparison        -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-
-term              -> factor ( ( "-" | "-=" | "+" | "+=" ) factor )* ;
-
-factor            -> postunary ( ( "/" | "/=" | "*" | "*=" | "%" | "%=" ) postunary )* ;
-
-postunary         -> ( "++" | "--") preunary ;
-
-preunary          -> ( "!"  | "-" ) unary
-                  | primary
-                  ;
-
-primary           -> NUMBER | STRING | "true" | "false" | "nil"
-                  | "(" expression ")" | IDENTIFIER
-                  ;
+expression        → assignment ;
+assignment        → IDENTIFIER "=" assignment
+                  | conditional ;
+conditional       → equality ( "?" expression ":" conditional)? ;
+equality          → comparison ( ( "!=" | "==" ) comparison )* ;
+comparison        → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term              → factor ( ( "-" | "+" ) factor )* ;
+factor            → unary ( ( "/" | "*" ) unary )* ;
+unary             → ( "!" | "-" | "--" | "++" ) unary
+                  | postfix ;
+postfix           → primary ( "--" | ++" )* ;
+primary           → NUMBER | STRING | "true" | "false" | "nil"
+                  | "(" expression ")"
+                  // Error productions...
+                  | ( "!=" | "==" ) equality
+                  | ( ">" | ">=" | "<" | "<=" ) comparison
+                  | ( "+" ) term
+                  | ( "/" | "*" ) factor ;
 
 

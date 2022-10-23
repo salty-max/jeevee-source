@@ -95,7 +95,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visitPostUnaryExpr(Expr.PostUnary expr) {
+    public Object visitPostFixExpr(Expr.PostFix expr) {
         Object left = evaluate(expr.left);
 
         switch (expr.operator.type) {
@@ -114,7 +114,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visitPreUnaryExpr(Expr.PreUnary expr) {
+    public Object visitUnaryExpr(Expr.Unary expr) {
         Object right = evaluate(expr.right);
 
         switch (expr.operator.type) {
@@ -191,7 +191,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visitTernaryExpr(Expr.Ternary expr) {
+    public Object visitConditionalExpr(Expr.Conditional expr) {
         Object test = evaluate(expr.test);
         Object consequent = evaluate(expr.consequent);
         Object alternate = evaluate(expr.alternate);

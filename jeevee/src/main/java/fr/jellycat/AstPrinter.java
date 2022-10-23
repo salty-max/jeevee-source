@@ -6,8 +6,8 @@
 // }
 
 // @Override
-// public String visitTernaryExpr(Expr.Ternary expr) {
-// return parenthesizeTernary(
+// public String visitConditionalExpr(Expr.Conditional expr) {
+// return parenthesizeConditional(
 // expr.firstOperator.lexeme, expr.secondOperator.lexeme, expr.test,
 // expr.consequent,
 // expr.alternate);
@@ -31,12 +31,12 @@
 // }
 
 // @Override
-// public String visitPostUnaryExpr(Expr.PostUnary expr) {
+// public String visitPostFixExpr(Expr.PostFix expr) {
 // return parenthesize(expr.operator.lexeme, expr.left);
 // }
 
 // @Override
-// public String visitPreUnaryExpr(Expr.PreUnary expr) {
+// public String visitUnaryExpr(Expr.Unary expr) {
 // return parenthesize(expr.operator.lexeme, expr.right);
 // }
 
@@ -55,7 +55,7 @@
 // return builder.toString();
 // }
 
-// private String parenthesizeTernary(String firstOperator, String
+// private String parenthesizeConditional(String firstOperator, String
 // secondOperator, Expr... exprs) {
 // StringBuilder builder = new StringBuilder();
 
