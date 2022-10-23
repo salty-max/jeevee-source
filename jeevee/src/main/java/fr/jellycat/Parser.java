@@ -60,6 +60,9 @@ class Parser {
     private Stmt statement() {
         if (match(IF))
             return ifStatement();
+        if (match(WHILE)) {
+            return whileStatement();
+        }
         if (match(PRINT))
             return printStatement();
         if (match(DO))
@@ -93,17 +96,31 @@ class Parser {
 
     private Stmt ifStatement() {
         Expr condition = expression();
-        consume(THEN, "Expect 'then' after if condition.");
+        consume(THEN, "Expect 'then' after condition.");
 
-        Stmt consequent = statement();
-        Stmt alternate = null;
-        if (match(ELSE)) {
-            alternate = statement();
+        List<Stmt> consequent = new ArrayList<>();
+        List<Stmt> alternate = new ArrayList<>();
+
+        while ((!check(ELSE) && !check(END)) && !isAtEnd()) {
+            consequent.add(declaration());
         }
 
-        consume(END, "Expect 'end' at the end of if statement.");
+        if (match(ELSE)) {
+            while (!check(END) && !isAtEnd()) {
+                alternate.add(declaration());
+            }
+        }
+
+        consume(END, "Expect 'end' after if statement.");
 
         return new Stmt.If(condition, consequent, alternate);
+    }
+
+    private Stmt whileStatement() {
+        Expr condition = expression();
+        Stmt body = statement();
+
+        return new Stmt.While(condition, body);
     }
 
     private Stmt printStatement() {

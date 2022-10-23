@@ -1,0 +1,13 @@
+let name = "Max";
+let age = 18;
+
+if age >= 18 then
+  let suffix = " (majeur)";
+  name = name + suffix;
+else
+  let suffix = " (mineur)";
+  name = name + suffix;
+end
+
+print name;
+

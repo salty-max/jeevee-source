@@ -31,7 +31,7 @@
       "request": "launch",
       "mainClass": "fr.jellycat.Jeevee",
       "projectName": "jeevee",
-      "args": ["test.eve"]
+      "args": ["test/while-loop.eve"]
     }
   ]
 }

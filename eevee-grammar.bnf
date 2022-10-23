@@ -23,6 +23,8 @@ declaration       → varDecl
                   ;
 statement         → exprStmt
                   | ifStmt
+                  | whileStmt
+                  | forStmt
                   | printStmt
                   | varDecl
                   | block
@@ -31,7 +33,8 @@ block             → "{" declaration* "}" ;
 exprStmt          → expression ";" ;
 varDecl           → "let" IDENTIFIER ( "=" expression )? ";" ;
 printStmt         → "print" expression ";" ;
-ifStmt            → "if" expression "then" statement ( "else" statement)? "end" ;
+ifStmt            → "if" expression "then" statement ( "else" statement )? "end" ;
+whileStmt         → "while" "(" expression ")" statement ;
 
 
 expression        → assignment ;
