@@ -58,9 +58,10 @@ class Parser {
     }
 
     private Stmt statement() {
+        if (match(IF))
+            return ifStatement();
         if (match(PRINT))
             return printStatement();
-
         if (match(DO))
             return new Stmt.Block(block());
 
@@ -88,6 +89,21 @@ class Parser {
 
         consume(END, "Expect 'end' after block.");
         return statements;
+    }
+
+    private Stmt ifStatement() {
+        Expr condition = expression();
+        consume(THEN, "Expect 'then' after if condition.");
+
+        Stmt consequent = statement();
+        Stmt alternate = null;
+        if (match(ELSE)) {
+            alternate = statement();
+        }
+
+        consume(END, "Expect 'end' at the end of if statement.");
+
+        return new Stmt.If(condition, consequent, alternate);
     }
 
     private Stmt printStatement() {
@@ -131,16 +147,40 @@ class Parser {
     }
 
     private Expr conditional() {
-        Expr expr = equality();
+        Expr expr = or();
 
         if (match(QUESTION_MARK)) {
-            Expr consequent = equality();
+            Expr consequent = or();
 
             consume(COLUMN, "Expect ':' after consequent of conditional expression.");
 
             Expr alternate = conditional();
 
             expr = new Expr.Conditional(expr, consequent, alternate);
+        }
+
+        return expr;
+    }
+
+    private Expr or() {
+        Expr expr = and();
+
+        while (match(OR)) {
+            Token operator = previous();
+            Expr right = and();
+            expr = new Expr.Logical(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    private Expr and() {
+        Expr expr = equality();
+
+        while (match(AND)) {
+            Token operator = previous();
+            Expr right = equality();
+            expr = new Expr.Logical(expr, operator, right);
         }
 
         return expr;

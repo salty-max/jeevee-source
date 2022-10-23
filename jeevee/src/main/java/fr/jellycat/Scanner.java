@@ -249,6 +249,7 @@ class Scanner {
         keywords.put("class", CLASS);
         keywords.put("def", DEF);
         keywords.put("do", DO);
+        keywords.put("else", ELSE);
         keywords.put("end", END);
         keywords.put("false", FALSE);
         keywords.put("for", FOR);
