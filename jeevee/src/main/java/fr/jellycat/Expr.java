@@ -30,11 +30,9 @@ abstract class Expr {
     }
 
     static class Conditional extends Expr {
-        Conditional(Expr test, Token firstOperator, Expr consequent, Token secondOperator, Expr alternate) {
+        Conditional(Expr test, Expr consequent, Expr alternate) {
             this.test = test;
-            this.firstOperator = firstOperator;
             this.consequent = consequent;
-            this.secondOperator = secondOperator;
             this.alternate = alternate;
         }
 
@@ -44,9 +42,7 @@ abstract class Expr {
         }
 
         final Expr test;
-        final Token firstOperator;
         final Expr consequent;
-        final Token secondOperator;
         final Expr alternate;
     }
 

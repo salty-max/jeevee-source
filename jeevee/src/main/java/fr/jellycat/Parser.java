@@ -134,21 +134,13 @@ class Parser {
         Expr expr = equality();
 
         if (match(QUESTION_MARK)) {
-            Token firstOperator = previous();
-
             Expr consequent = equality();
 
-            if (check(COLUMN)) {
-                while (match(COLUMN)) {
-                    Token secondOperator = previous();
-                    Expr alternate = conditional();
+            consume(COLUMN, "Expect ':' after consequent of conditional expression.");
 
-                    expr = new Expr.Conditional(expr, firstOperator, consequent, secondOperator,
-                            alternate);
-                }
-            } else {
-                throw error(previous(), "Expect ':' after expression.");
-            }
+            Expr alternate = conditional();
+
+            expr = new Expr.Conditional(expr, consequent, alternate);
         }
 
         return expr;
