@@ -230,7 +230,7 @@ class Parser {
     private Expr term() {
         Expr expr = factor();
 
-        while (match(MINUS, MINUS_EQUAL, PLUS, PLUS_EQUAL)) {
+        while (match(MINUS, PLUS)) {
             Token operator = previous();
             Expr right = factor();
             expr = new Expr.Binary(expr, operator, right);
@@ -240,36 +240,36 @@ class Parser {
     }
 
     private Expr factor() {
-        Expr expr = postfix();
+        Expr expr = unary();
 
-        while (match(STAR, STAR_EQUAL, SLASH, SLASH_EQUAL, PERCENT, PERCENT_EQUAL)) {
+        while (match(STAR, SLASH, PERCENT)) {
             Token operator = previous();
-            Expr right = postfix();
+            Expr right = unary();
             expr = new Expr.Binary(expr, operator, right);
         }
 
         return expr;
     }
 
-    private Expr postfix() {
-        Expr expr = unary();
-
-        if (match(MINUS_MINUS, PLUS_PLUS)) {
-            Token operator = previous();
-            expr = new Expr.PostFix(expr, operator);
-        }
-
-        return expr;
-    }
-
     private Expr unary() {
-        if (match(MINUS, PLUS, BANG)) {
+        if (match(MINUS, PLUS, BANG, PLUS_PLUS, MINUS_MINUS)) {
             Token operator = previous();
             Expr right = unary();
             return new Expr.Unary(operator, right);
         }
 
-        return primary();
+        return postfix();
+    }
+
+    private Expr postfix() {
+        Expr expr = primary();
+
+        if (match(MINUS_MINUS, PLUS_PLUS)) {
+            Token operator = previous();
+            return new Expr.PostFix(expr, operator);
+        }
+
+        return expr;
     }
 
     private Expr primary() {

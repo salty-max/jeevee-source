@@ -116,13 +116,22 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitPostFixExpr(Expr.PostFix expr) {
         Object left = evaluate(expr.left);
+        Expr.Variable var = null;
+
+        if (expr.left instanceof Expr.Variable) {
+            var = (Expr.Variable) expr.left;
+        }
 
         switch (expr.operator.type) {
             case MINUS_MINUS:
                 checkNumberOperand(expr.operator, left);
+                if (var != null)
+                    environment.assign(var.name, (double) left - 1);
                 return (double) left - 1;
             case PLUS_PLUS:
                 checkNumberOperand(expr.operator, left);
+                if (var != null)
+                    environment.assign(var.name, (double) left + 1);
                 return (double) left + 1;
             default:
                 break;
@@ -142,6 +151,12 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return -(double) right;
             case BANG:
                 return !isTruthy(right);
+            case MINUS_MINUS:
+                checkNumberOperand(expr.operator, right);
+                return (double) right - 1;
+            case PLUS_PLUS:
+                checkNumberOperand(expr.operator, right);
+                return (double) right + 1;
             default:
                 break;
         }
