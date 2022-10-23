@@ -15,6 +15,16 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
     }
 
+    String interpret(Expr expression) {
+        try {
+            Object value = evaluate(expression);
+            return stringify(value);
+        } catch (RuntimeError error) {
+            Jeevee.runtimeError(error);
+            return null;
+        }
+    }
+
     private Object evaluate(Expr expr) {
         return expr.accept(this);
     }

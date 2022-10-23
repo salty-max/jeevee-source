@@ -43,14 +43,26 @@ public final class Jeevee {
         BufferedReader reader = new BufferedReader(input);
 
         for (;;) {
-            System.out.print("> ");
-            String line = reader.readLine();
-
-            if (line == null)
-                break;
-
-            run(line);
             hadError = false;
+
+            System.out.print("> ");
+            Scanner scanner = new Scanner(reader.readLine());
+            List<Token> tokens = scanner.scanTokens();
+
+            Parser parser = new Parser(tokens);
+            Object syntax = parser.parseREPL();
+
+            if (hadError)
+                continue;
+
+            if (syntax instanceof List) {
+                interpreter.interpret((List<Stmt>) syntax);
+            } else if (syntax instanceof Expr) {
+                String result = interpreter.interpret((Expr) syntax);
+                if (result != null) {
+                    Jeevee.log("= " + result);
+                }
+            }
         }
     }
 
@@ -94,6 +106,6 @@ public final class Jeevee {
     }
 
     static void log(String value) {
-        System.out.println(ANSI_BLUE + value + ANSI_RESET);
+        System.out.println(ANSI_BOLD + ANSI_BLUE + value + ANSI_RESET);
     }
 }
