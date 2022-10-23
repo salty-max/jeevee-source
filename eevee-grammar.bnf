@@ -34,7 +34,10 @@ exprStmt          → expression ";" ;
 varDecl           → "let" IDENTIFIER ( "=" expression )? ";" ;
 printStmt         → "print" expression ";" ;
 ifStmt            → "if" expression "then" statement ( "else" statement )? "end" ;
-whileStmt         → "while" "(" expression ")" statement ;
+whileStmt         → "while" expression statement ;
+forStmt           → "for" ( varDecl | exprStmt | "," )
+                    expression? ","
+                    expression? statement ;
 
 
 expression        → assignment ;

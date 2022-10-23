@@ -3,6 +3,7 @@ package fr.jellycat;
 import static fr.jellycat.TokenType.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class Parser {
@@ -63,6 +64,9 @@ class Parser {
         if (match(WHILE)) {
             return whileStatement();
         }
+        if (match(FOR)) {
+            return forStatement();
+        }
         if (match(PRINT))
             return printStatement();
         if (match(DO))
@@ -121,6 +125,46 @@ class Parser {
         Stmt body = statement();
 
         return new Stmt.While(condition, body);
+    }
+
+    private Stmt forStatement() {
+        Stmt initializer;
+        if (match(SEMICOLON)) {
+            initializer = null;
+        } else if (match(LET)) {
+            initializer = varDeclaration();
+        } else {
+            initializer = expressionStatement();
+        }
+
+        Expr condition = null;
+        if (!check(SEMICOLON)) {
+            condition = expression();
+        }
+        consume(SEMICOLON, "Expect ';' after loop condition");
+
+        Expr increment = null;
+        if (!check(DO)) {
+            increment = expression();
+        }
+
+        Stmt body = statement();
+
+        if (increment != null) {
+            body = new Stmt.Block(Arrays.asList(
+                    body,
+                    new Stmt.Expression(increment)));
+        }
+
+        if (condition == null)
+            condition = new Expr.Literal(true);
+        body = new Stmt.While(condition, body);
+
+        if (initializer != null) {
+            body = new Stmt.Block(Arrays.asList(initializer, body));
+        }
+
+        return body;
     }
 
     private Stmt printStatement() {
